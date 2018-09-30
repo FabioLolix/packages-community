@@ -1,26 +1,18 @@
-# Maintainer: willemw <willemw12@gmail.com>
+# Maintainer : fhdk <echo ZmhAbWFuamFyby5vcmcK | base64 -d>
+# Contributor: willemw <willemw12@gmail.com>
 # Contributor: unclesam <web _AT_ shinobi-mail _DOT_ de>
 
-_pkgname=mintstick
-pkgname=$_pkgname
-pkgver=r181.cba7e9c
-pkgrel=1
-pkgdesc="Format or write images to usb-sticks (Linux Mint tool)"
-arch=('any')
+pkgname=mintstick
+pkgver=1.3.8
+pkgrel=3
+pkgdesc="A GUI to write .img or .iso files to a USB Key. It can also format them"
+arch=(any)
 url="https://github.com/linuxmint/mintstick"
-license=('GPL')
-depends=('desktop-file-utils' 'dosfstools' 'python2-dbus' 'python2-gobject' 'python2-pyparted' 'python2-xapp' 'udisks2' 'xapps')
-optdepends=('dosfstools: FAT filesystems' 'e2fsprogs: Ext filesystems' 'ntfs-3g: NTFS filesystems')
-makedepends=('git')
-provides=($_pkgname)
-conflicts=($_pkgname)
-source=($pkgname::git://github.com/linuxmint/mintstick.git)
-md5sums=(SKIP)
-
-pkgver() {
-  cd $pkgname
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
+license=(GPL)
+depends=(desktop-file-utils python2-dbus python2-gobject python2-pyparted python2-xapp udisks2 xapps gtk3 parted)
+optdepends=('dosfstools: FAT filesystems' 'exfat-utils: exFAT filesystems' 'ntfs-3g: NTFS filesystems')
+source=("http://packages.linuxmint.com/pool/main/m/mintstick/${pkgname}_${pkgver}.tar.xz")
+sha256sums=('4fffcaa6d8484b67e82148061140aa87f1386194c4e9f01bf2c30e4a20ccab04')
 
 prepare() {
   cd $pkgname
@@ -35,8 +27,9 @@ package() {
   install -d "$pkgdir/usr/share/kde4/apps/solid/actions"
   install -d "$pkgdir/usr/share/polkit-1/actions"
 
-  cp -rp share/nemo "$pkgdir/usr/share"
+  cp -rp share/{icons,nemo} "$pkgdir/usr/share"
 
   ./install.sh
-}
 
+  install -Dm644 "$srcdir/$pkgname/debian/copyright" "$pkgdir/usr/share/licenses/$pkgname/copyright"
+}
